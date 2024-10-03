@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image & Audio Matching Game</title>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .image-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .image-container img {
+            max-width: 300px;
+            max-height: 300px;
+            border: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+        .play-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .play-button:hover {
+            background-color: #0056b3;
+        }
+        .button-container {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        .button-container button {
+            background-color: #fff;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            width: 80px;  /* Set a fixed width */
+            height: 80px;  /* Set a fixed height */
+            margin: 0 10px;
+            font-size: 24px;
+            color: #333;
+            cursor: pointer;
+            display: flex;  /* Flexbox to center the icon */
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .button-container button:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .button-container button:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center; margin-bottom: 25px;">Image & Audio Matching Game</h1>
+    <div class="image-container">
+        <img id="item-image" src="image1.jpg" alt="Item Image">
+        <button id="play-audio" class="play-button">Play</button>
+    </div>
+
+    <div class="button-container">
+        <button id="pen-btn"><i class="fas fa-pen"></i></button>
+        <button id="paper-btn"><i class="fas fa-file"></i></button>
+        <button id="book-btn"><i class="fas fa-book"></i></button>
+        <button id="eraser-btn"><i class="fas fa-eraser"></i></button>
+    </div>
+
+    <audio id="voice-audio" src=""></audio>
+
+    <script>
+        // Image and audio data
+        const items = [
+            { image: 'finn.png', audio: 'finn.mp3', correct: 'paper-btn' },
+            { image: 'fluttershy.png', audio: 'fluttershy.mp3', correct: 'pen-btn' },
+            { image: 'marinette.png', audio: 'marinette.mp3', correct: 'book-btn' },
+            { image: 'spongebob.png', audio: 'spongebob.mp3', correct: 'eraser-btn' }
+        ];
+
+        let currentIndex = 0;
+
+        const imageElement = document.getElementById('item-image');
+        const playAudioButton = document.getElementById('play-audio');
+        const audioElement = document.getElementById('voice-audio');
+
+        // Function to update the image and audio source
+        function updateItem() {
+            imageElement.src = items[currentIndex].image;
+            audioElement.src = items[currentIndex].audio;
+        }
+
+        // Play the current audio when the play button is clicked
+        playAudioButton.addEventListener('click', function() {
+            audioElement.play();
+        });
+
+        // Event listeners for the buttons at the bottom
+        document.getElementById('pen-btn').addEventListener('click', function() {
+            checkAnswer('pen-btn');
+        });
+        document.getElementById('paper-btn').addEventListener('click', function() {
+            checkAnswer('paper-btn');
+        });
+        document.getElementById('book-btn').addEventListener('click', function() {
+            checkAnswer('book-btn');
+        });
+        document.getElementById('eraser-btn').addEventListener('click', function() {
+            checkAnswer('eraser-btn');
+        });
+
+        // Function to check if the clicked button is correct
+        function checkAnswer(buttonId) {
+            if (buttonId === items[currentIndex].correct) {
+                currentIndex++;
+                if (currentIndex >= items.length) {
+                    currentIndex = 0;  // Reset after all items are completed
+                }
+                updateItem();
+            } else {
+                alert('Wrong choice, try again!');
+            }
+        }
+
+        // Initial setup
+        updateItem();
+    </script>
+
+</body>
+</html>
